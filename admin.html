@@ -61,6 +61,7 @@
   <button id="resetVisitors">إعادة تعيين عداد الزوار</button>
   <button id="resetSocial">إعادة عدادات السوشيال</button>
   <button id="resetVisitorsmin">تنقيص عدد الزوار</button>
+  <button id="resetVisitorspls">تزويد عدد الزوار</button>
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -107,11 +108,31 @@
     });
     
     // نقص 1 من عدد الزوار
-    document.getElementById('resetVisitorsmin').addEventListener('click', () => {
-      if (confirm("هل تريد تنقيص عدد الزوار1؟")) {
-        visitorRef.set(-1);
+document.getElementById('resetVisitorsmin').addEventListener('click', () => {
+  if (confirm("هل تريد تنقيص عدد الزوار 1؟")) {
+    visitorRef.once('value').then((snapshot) => {
+      let current = snapshot.val() || 0;
+
+      if (current > 0) {
+        visitorRef.set(current - 1);
+      } else {
+        alert("عدد الزوار بالفعل 0 ولا يمكن التنقيص أكثر.");
       }
     });
+  }
+});
+
+    //تزويد عدد الزوار 1
+    document.getElementById('resetVisitorspls').addEventListener('click', () => {
+  if (confirm("هل تريد تزويد عدد الزوار 1؟")) {
+    visitorRef.once('value').then((snapshot) => {
+      let current = snapshot.val() || 0;
+      visitorRef.set(current + 1);
+    });
+  }
+});
+
+
     // إعادة تعيين السوشيال
     document.getElementById('resetSocial').addEventListener('click', () => {
       if (confirm("هل تريد إعادة عدادات السوشيال كلها؟")) {
