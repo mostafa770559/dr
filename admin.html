@@ -7,138 +7,375 @@
   <style>
     body {
       font-family: 'Tajawal', sans-serif;
-      background: #f7f7f7;
+      background: #f5f6fa;
       padding: 20px;
+      margin: 0;
       text-align: center;
     }
-
     h1 {
       color: #333;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
+      font-size: 2em;
     }
-
-    .counter-box {
-      font-size: 20px;
-      background: #fff;
-      padding: 15px;
-      margin: 10px auto;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: fit-content;
+    .counter-container {
+      max-width: 600px;
+      margin: 15px auto;
+      border-radius: 12px;
+      padding: 20px;
+      color: white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-
-    button {
-      margin: 10px;
+    #visitorCounter { background: linear-gradient(135deg, #5b0fca, #2a72ff); }
+    #whatsappCounter { background: linear-gradient(135deg, #25d366, #128c4a); }
+    #instagramCounter { background: linear-gradient(135deg, #f09433, #dc2743, #cc2366); }
+    #snapchatCounter { background: linear-gradient(135deg, #fcdc00, #c6b900); color: #222; }
+    #tiktokCounter { background: linear-gradient(135deg, #69c9d0, #00f2ea); }
+    .counter-label {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    .counter-value {
+      font-size: 2em;
+      margin-bottom: 15px;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    .btn-group button {
       padding: 10px 20px;
-      font-size: 16px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
+      color: white;
+    }
+    .increase { background: rgba(255, 255, 255, 0.2); }
+    .decrease { background: rgba(0, 0, 0, 0.2); }
+    .reset-buttons {
+      margin-top: 30px;
+    }
+    .reset-buttons button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
       border: none;
       border-radius: 6px;
       color: white;
-      background-color: #007bff;
-      transition: background 0.3s;
+      cursor: pointer;
+    }
+    #resetVisitors { background: #007bff; }
+    #resetSocial { background: #28a745; }
+
+    /* تصميم زر تحميل Excel */
+    #downloadExcelBtn {
+      background: #ff5722;
+      margin: 30px auto;
+      padding: 12px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 30px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(255, 87, 34, 0.5);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      display: block;
+      max-width: 220px;
+    }
+    #downloadExcelBtn:hover {
+      background: #e64a19;
+      box-shadow: 0 8px 20px rgba(230, 74, 25, 0.7);
     }
 
-    button:hover {
-      background-color: #0056b3;
+    #chartContainer {
+      margin: 50px auto;
+      max-width: 900px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      height: 450px;
     }
-
-    #resetSocial { background-color: #dc3545; }
-    #resetSocial:hover { background-color: #b52a38; }
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
   </style>
 </head>
 <body>
 
-  <h1>لوحة التحكم</h1>
+<h1>لوحة تحكم الزيارات</h1>
 
-  <div class="counter-box" id="visitorBox">عدد زيارات الصفحة الرئيسية: جاري التحميل...</div>
+<div class="counter-container" id="visitorCounter">
+  <div class="counter-label">عدد زيارات الصفحة الرئيسية</div>
+  <div class="counter-value" id="visitorBox">جاري التحميل...</div>
+  <div class="btn-group">
+    <button class="decrease" data-counter="visitor">−</button>
+    <button class="increase" data-counter="visitor">+</button>
+  </div>
+</div>
 
-  <div class="counter-box" id="whatsappCount">واتساب: جاري التحميل...</div>
-  <div class="counter-box" id="instagramCount">إنستجرام: جاري التحميل...</div>
-  <div class="counter-box" id="snapchatCount">سناب شات: جاري التحميل...</div>
-  <div class="counter-box" id="tiktokCount">تيك توك: جاري التحميل...</div>
+<div class="counter-container" id="whatsappCounter">
+  <div class="counter-label">واتساب</div>
+  <div class="counter-value" id="whatsappCount">جاري التحميل...</div>
+  <div class="btn-group">
+    <button class="decrease" data-counter="whatsapp">−</button>
+    <button class="increase" data-counter="whatsapp">+</button>
+  </div>
+</div>
 
+<div class="counter-container" id="instagramCounter">
+  <div class="counter-label">إنستجرام</div>
+  <div class="counter-value" id="instagramCount">جاري التحميل...</div>
+  <div class="btn-group">
+    <button class="decrease" data-counter="instagram">−</button>
+    <button class="increase" data-counter="instagram">+</button>
+  </div>
+</div>
+
+<div class="counter-container" id="snapchatCounter">
+  <div class="counter-label">سناب شات</div>
+  <div class="counter-value" id="snapchatCount">جاري التحميل...</div>
+  <div class="btn-group">
+    <button class="decrease" data-counter="snapchat">−</button>
+    <button class="increase" data-counter="snapchat">+</button>
+  </div>
+</div>
+
+<div class="counter-container" id="tiktokCounter">
+  <div class="counter-label">تيك توك</div>
+  <div class="counter-value" id="tiktokCount">جاري التحميل...</div>
+  <div class="btn-group">
+    <button class="decrease" data-counter="tiktok">−</button>
+    <button class="increase" data-counter="tiktok">+</button>
+  </div>
+</div>
+
+<div class="reset-buttons">
   <button id="resetVisitors">إعادة تعيين عداد الزوار</button>
   <button id="resetSocial">إعادة عدادات السوشيال</button>
-  <button id="resetVisitorsmin">تنقيص عدد الزوار</button>
-  <button id="resetVisitorspls">تزويد عدد الزوار</button>
+</div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<button id="downloadExcelBtn">تحميل البيانات Excel</button>
 
-  <script>
-    // إعدادات Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyAci1p0uVxkZI8K3UIxsmRXDXIRsdXNct8",
-      authDomain: "visitor-counter-5c400.firebaseapp.com",
-      databaseURL: "https://visitor-counter-5c400-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "visitor-counter-5c400",
-      storageBucket: "visitor-counter-5c400.firebasestorage.app",
-      messagingSenderId: "884458096546",
-      appId: "1:884458096546:web:3f5444a1753898aab954fb",
-      measurementId: "G-E0CBN6EHSG"
-    };
+<div id="chartContainer">
+  <canvas id="historyChart"></canvas>
+</div>
 
-    // تهيئة Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAci1p0uVxkZI8K3UIxsmRXDXIRsdXNct8",
+    authDomain: "visitor-counter-5c400.firebaseapp.com",
+    databaseURL: "https://visitor-counter-5c400-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "visitor-counter-5c400",
+    storageBucket: "visitor-counter-5c400.appspot.com",
+    messagingSenderId: "884458096546",
+    appId: "1:884458096546:web:3f5444a1753898aab954fb"
+  };
 
-    // قراءة عدد الزوار
-    const visitorRef = db.ref('visitorCount');
-    visitorRef.on('value', snapshot => {
-      const count = snapshot.val() || 0;
-      document.getElementById('visitorBox').innerText = 'عدد زيارات الصفحة الرئيسية: ' + count;
-    });
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const counters = ['visitor', 'whatsapp', 'instagram', 'snapchat', 'tiktok'];
 
-    // قراءة ضغطات السوشيال
-    const platforms = ['whatsapp', 'instagram', 'snapchat', 'tiktok'];
-    platforms.forEach(platform => {
-      db.ref('clicks/' + platform).on('value', snapshot => {
-        const count = snapshot.val() || 0;
-        document.getElementById(platform + 'Count').innerText = `${platform === 'whatsapp' ? 'واتساب' : platform === 'instagram' ? 'إنستجرام' : platform === 'snapchat' ? 'سناب شات' : 'تيك توك'}: ${count} ضغطة`;
+  const visitorBox = document.getElementById('visitorBox');
+  const whatsappCount = document.getElementById('whatsappCount');
+  const instagramCount = document.getElementById('instagramCount');
+  const snapchatCount = document.getElementById('snapchatCount');
+  const tiktokCount = document.getElementById('tiktokCount');
+
+  let historyChartInstance;
+
+  // ألوان لكل عداد في الرسم البياني
+  const colors = {
+    visitor: '#5b0fca',
+    whatsapp: '#25d366',
+    instagram: '#cc2366',
+    snapchat: '#fcdc00',
+    tiktok: '#00f2ea',
+  };
+
+  function loadDataAndRenderChart() {
+    db.ref().once('value').then(snapshot => {
+      const data = snapshot.val() || {};
+      counters.forEach(counter => {
+        const value = counter === 'visitor' ? data.visitorCount || 0 : data.clicks?.[counter] || 0;
+        const elId = counter === 'visitor' ? 'visitorBox' : counter + 'Count';
+        document.getElementById(elId).innerText = value;
+      });
+
+      const history = data.dailyVisitors || {};
+
+      // جهز التاريخ (آخر 30 يوم أو أقل)
+      const allDates = Object.keys(history).sort();
+      const lastDates = allDates.slice(-30);
+
+      // بيانات كل عداد يوميًا (لو موجودة، وإلا صفر)
+      // visitor daily data موجودة، باقي السوشيال مش متوفر لها بيانات يومية في الـ Firebase في الكود الحالي، فا هنخليها صفر ثابت
+      const visitorData = lastDates.map(date => history[date] || 0);
+
+      // بالنسبة للسوشيال، لو عندك بيانات يومية، تضيف هنا تحميلها من الداتا
+      // حالياً نفترض صفر لكل الأيام
+      const whatsappData = new Array(lastDates.length).fill(data.clicks?.whatsapp || 0);
+      const instagramData = new Array(lastDates.length).fill(data.clicks?.instagram || 0);
+      const snapchatData = new Array(lastDates.length).fill(data.clicks?.snapchat || 0);
+      const tiktokData = new Array(lastDates.length).fill(data.clicks?.tiktok || 0);
+
+      if(historyChartInstance) historyChartInstance.destroy();
+
+      const ctx = document.getElementById('historyChart').getContext('2d');
+      historyChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: lastDates,
+          datasets: [
+            {
+              label: 'زيارات الصفحة الرئيسية',
+              data: visitorData,
+              borderColor: colors.visitor,
+              backgroundColor: 'rgba(91, 15, 202, 0.2)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 3,
+              pointHoverRadius: 6,
+              borderWidth: 3,
+            },
+            {
+              label: 'واتساب',
+              data: whatsappData,
+              borderColor: colors.whatsapp,
+              backgroundColor: 'rgba(37, 211, 102, 0.2)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 3,
+              pointHoverRadius: 6,
+              borderWidth: 3,
+            },
+            {
+              label: 'إنستجرام',
+              data: instagramData,
+              borderColor: colors.instagram,
+              backgroundColor: 'rgba(204, 35, 102, 0.2)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 3,
+              pointHoverRadius: 6,
+              borderWidth: 3,
+            },
+            {
+              label: 'سناب شات',
+              data: snapchatData,
+              borderColor: colors.snapchat,
+              backgroundColor: 'rgba(252, 220, 0, 0.2)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 3,
+              pointHoverRadius: 6,
+              borderWidth: 3,
+            },
+            {
+              label: 'تيك توك',
+              data: tiktokData,
+              borderColor: colors.tiktok,
+              backgroundColor: 'rgba(0, 242, 234, 0.2)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 3,
+              pointHoverRadius: 6,
+              borderWidth: 3,
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top', labels: { font: { size: 14 } } },
+            title: { display: true, text: 'إحصائيات الزيارات وعدادات السوشيال (آخر 30 يوم)' }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
       });
     });
+  }
 
-    // إعادة تعيين الزوار
-    document.getElementById('resetVisitors').addEventListener('click', () => {
-      if (confirm("هل تريد إعادة تعيين عدد الزوار؟")) {
-        visitorRef.set(0);
-      }
-    });
-    
-    // نقص 1 من عدد الزوار
-document.getElementById('resetVisitorsmin').addEventListener('click', () => {
-  if (confirm("هل تريد تنقيص عدد الزوار 1؟")) {
-    visitorRef.once('value').then((snapshot) => {
-      let current = snapshot.val() || 0;
-
-      if (current > 0) {
-        visitorRef.set(current - 1);
-      } else {
-        alert("عدد الزوار بالفعل 0 ولا يمكن التنقيص أكثر.");
+  function updateCounter(counter, delta) {
+    const ref = counter === 'visitor' ? db.ref('visitorCount') : db.ref('clicks/' + counter);
+    ref.transaction(current => {
+      if (current === null) current = 0;
+      let newVal = current + delta;
+      if (newVal < 0) newVal = 0;
+      return newVal;
+    }, (error, committed, snapshot) => {
+      if (committed && counter === 'visitor' && delta > 0) {
+        const today = new Date();
+        const dateKey = today.toISOString().split('T')[0];
+        const dailyRef = db.ref('dailyVisitors/' + dateKey);
+        dailyRef.transaction(currentDaily => (currentDaily || 0) + 1);
       }
     });
   }
-});
 
-    //تزويد عدد الزوار 1
-    document.getElementById('resetVisitorspls').addEventListener('click', () => {
-  if (confirm("هل تريد تزويد عدد الزوار 1؟")) {
-    visitorRef.once('value').then((snapshot) => {
-      let current = snapshot.val() || 0;
-      visitorRef.set(current + 1);
+  db.ref().on('value', snapshot => {
+    const data = snapshot.val() || {};
+    visitorBox.innerText = data.visitorCount || 0;
+    whatsappCount.innerText = data.clicks?.whatsapp || 0;
+    instagramCount.innerText = data.clicks?.instagram || 0;
+    snapchatCount.innerText = data.clicks?.snapchat || 0;
+    tiktokCount.innerText = data.clicks?.tiktok || 0;
+
+    loadDataAndRenderChart();
+  });
+
+  document.querySelectorAll('.increase, .decrease').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const counter = btn.dataset.counter;
+      const delta = btn.classList.contains('increase') ? 1 : -1;
+      updateCounter(counter, delta);
     });
-  }
-});
+  });
 
+  document.getElementById('resetVisitors').addEventListener('click', () => {
+    if (confirm('هل تريد إعادة تعيين عدد الزوار؟')) {
+      db.ref('visitorCount').set(0);
+    }
+  });
 
-    // إعادة تعيين السوشيال
-    document.getElementById('resetSocial').addEventListener('click', () => {
-      if (confirm("هل تريد إعادة عدادات السوشيال كلها؟")) {
-        platforms.forEach(p => db.ref('clicks/' + p).set(0));
-      }
-    });
-  </script>
+  document.getElementById('resetSocial').addEventListener('click', () => {
+    if (confirm('هل تريد إعادة عدادات السوشيال كلها؟')) {
+      counters.slice(1).forEach(counter => db.ref('clicks/' + counter).set(0));
+    }
+  });
+
+  // تحميل البيانات كملف Excel
+  document.getElementById('downloadExcelBtn').addEventListener('click', () => {
+    const dataToExport = [
+      ['النوع', 'العدد'],
+      ['زيارات الصفحة الرئيسية', visitorBox.innerText],
+      ['واتساب', whatsappCount.innerText],
+      ['إنستجرام', instagramCount.innerText],
+      ['سناب شات', snapchatCount.innerText],
+      ['تيك توك', tiktokCount.innerText],
+    ];
+
+    // إنشاء ملف Excel
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(dataToExport);
+    XLSX.utils.book_append_sheet(wb, ws, "عدادات");
+
+    XLSX.writeFile(wb, "عدادات_الزيارات.xlsx");
+  });
+
+</script>
+
 </body>
 </html>
