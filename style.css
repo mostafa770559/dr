@@ -587,7 +587,7 @@ background-color: #0056b3 !important;
   background-color: white;
   margin-bottom: 10px;
 }
-@media (max-width: 500px) {
+@media (max-width: 750px) {
   .doctor-photo{
     width: 150px; 
     height: 150px;
@@ -601,3 +601,4 @@ background-color: #0056b3 !important;
  height: 150px; 
 }
 }
+
