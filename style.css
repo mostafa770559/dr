@@ -591,6 +591,8 @@ background-color: #0056b3 !important;
   .doctor-photo{
     width: 150px; 
     height: 150px;
+    top: 170px;
+  
   }
   .doctor-info{
            /*margin-top:170px;*/
@@ -601,5 +603,3 @@ background-color: #0056b3 !important;
  height: 150px; 
 }
 }
-
-
