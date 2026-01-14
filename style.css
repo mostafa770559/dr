@@ -14,10 +14,23 @@ body {
   direction: rtl;
   text-align: center;
 }
+.new-logo{
+color: #ae955b;
+
+}
 
 .a{
 
 text-decoration: none !important;
+}
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px 0 10px;
+}
+
+.title.now {
+  margin-bottom: 20px;
 }
 
 .text{
@@ -32,9 +45,13 @@ text-decoration: none !important;
 }
 
 .logo {
-  width: 120px;
+  width: 390px;
   height: auto;
   margin-bottom: -10px;
+}
+
+.logoo{
+  width: 120px;
 }
 
 h1 {
